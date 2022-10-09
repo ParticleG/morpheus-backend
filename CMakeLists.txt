@@ -1,78 +1,73 @@
-cmake_minimum_required(VERSION 3.5)
-project(NovelAI-backend CXX)
+cmake_minimum_required(VERSION 3.20)
 
-include(CheckIncludeFileCXX)
-
-check_include_file_cxx(any HAS_ANY)
-check_include_file_cxx(string_view HAS_STRING_VIEW)
-check_include_file_cxx(coroutine HAS_COROUTINE)
-if (NOT "${CMAKE_CXX_STANDARD}" STREQUAL "")
-    # Do nothing
-elseif (HAS_ANY AND HAS_STRING_VIEW AND HAS_COROUTINE)
-    set(CMAKE_CXX_STANDARD 20)
-elseif (HAS_ANY AND HAS_STRING_VIEW)
-    set(CMAKE_CXX_STANDARD 17)
-else ()
-    set(CMAKE_CXX_STANDARD 14)
-endif ()
-
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+
+message(STATUS "C++ standard set to ${CMAKE_CXX_STANDARD}")
+
+project(NovelAI-backend CXX)
+
+add_compile_definitions(CMAKE_PROJECT_NAME="${PROJECT_NAME}")
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    message(STATUS "Compiler is Clang")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    message(STATUS "Compiler is GCC")
+    add_compile_options(-Wno-volatile)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    message(STATUS "Compiler is Intel C++")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    message(STATUS "Compiler is Visual Studio C++")
+    add_compile_options(/MP /utf-8)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS NOMINMAX)
+endif ()
 
 add_executable(${PROJECT_NAME} main.cc)
 
-# ##############################################################################
-# If you include the drogon source code locally in your project, use this method
-# to add drogon 
-# add_subdirectory(drogon) 
-# target_link_libraries(${PROJECT_NAME} PRIVATE drogon)
-#
-# and comment out the following lines
+find_library(CPPREDIS_LIB cpp_redis)
+find_library(TACOPIE_LIB tacopie)
+find_package(cryptopp CONFIG REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+find_package(magic_enum CONFIG REQUIRED)
 
-# ##############################################################################
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        cryptopp-static
+        Drogon::Drogon
+        magic_enum::magic_enum
+        ${CPPREDIS_LIB}
+        ${TACOPIE_LIB})
 
-if (CMAKE_CXX_STANDARD LESS 17)
-    # With C++14, use boost to support any, string_view and filesystem
-    message(STATUS "use c++14")
-    find_package(Boost 1.61.0 REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
-elseif (CMAKE_CXX_STANDARD LESS 20)
-    message(STATUS "use c++17")
-else ()
-    message(STATUS "use c++20")
-endif ()
+target_include_directories(${PROJECT_NAME}
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/models)
 
 aux_source_directory(controllers CTL_SRC)
 aux_source_directory(filters FILTER_SRC)
-aux_source_directory(plugins PLUGIN_SRC)
+aux_source_directory(helpers HELPER_SRC)
 aux_source_directory(models MODEL_SRC)
+aux_source_directory(plugins PLUGIN_SRC)
+aux_source_directory(strategies STRATEGY_SRC)
+aux_source_directory(structures STRUCT_SRC)
+aux_source_directory(types TYPE_SRC)
+aux_source_directory(utils UTIL_SRC)
 
-drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-                    ${CMAKE_CURRENT_BINARY_DIR})
-# use the following line to create views with namespaces.
-# drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-#                     ${CMAKE_CURRENT_BINARY_DIR} TRUE)
-# use the following line to create views with namespace CHANGE_ME prefixed
-# and path namespaces.
-# drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-#                     ${CMAKE_CURRENT_BINARY_DIR} TRUE CHANGE_ME)
-
-target_include_directories(${PROJECT_NAME}
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                   ${CMAKE_CURRENT_SOURCE_DIR}/models)
 target_sources(${PROJECT_NAME}
-               PRIVATE
-               ${SRC_DIR}
-               ${CTL_SRC}
-               ${FILTER_SRC}
-               ${PLUGIN_SRC}
-               ${MODEL_SRC})
-# ##############################################################################
-# uncomment the following line for dynamically loading views 
-# set_property(TARGET ${PROJECT_NAME} PROPERTY ENABLE_EXPORTS ON)
-
-# ##############################################################################
+        PRIVATE
+        ${CTL_SRC}
+        ${FILTER_SRC}
+        ${HELPER_SRC}
+        ${MODEL_SRC}
+        ${PLUGIN_SRC}
+        ${STRATEGY_SRC}
+        ${STRUCT_SRC}
+        ${TYPE_SRC}
+        ${UTIL_SRC})
 
 add_subdirectory(test)
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config.json ${CMAKE_CURRENT_SOURCE_DIR}/verifyEmail.html
+        DESTINATION ${CMAKE_BINARY_DIR})
