@@ -561,3 +561,9 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,visualstudio,visualstudiocode,cmake,c,c++
 /config.json
 /models/model.json
+/Lib/
+/Scripts/activate
+/Scripts/activate.bat
+/Scripts/Activate.ps1
+/Scripts/deactivate.bat
+/pyvenv.cfg

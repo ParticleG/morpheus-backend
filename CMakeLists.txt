@@ -31,6 +31,7 @@ find_library(TACOPIE_LIB tacopie)
 find_package(cryptopp CONFIG REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
+find_package(Python3 COMPONENTS Development REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
@@ -38,7 +39,8 @@ target_link_libraries(${PROJECT_NAME}
         Drogon::Drogon
         magic_enum::magic_enum
         ${CPPREDIS_LIB}
-        ${TACOPIE_LIB})
+        ${TACOPIE_LIB}
+        Python3::Python)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE
@@ -68,6 +70,18 @@ target_sources(${PROJECT_NAME}
         ${UTIL_SRC})
 
 add_subdirectory(test)
+
+if (WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${Python3_EXECUTABLE} -m venv $<TARGET_FILE_DIR:${PROJECT_NAME}>/..
+            COMMAND $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Scripts/activate.bat
+            COMMAND python -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt > pip_install.log)
+else ()
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${Python3_EXECUTABLE} -m venv $<TARGET_FILE_DIR:${PROJECT_NAME}>/..
+            COMMAND $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Scripts/activate
+            COMMAND python -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt > pip_install.log)
+endif ()
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config.json ${CMAKE_CURRENT_SOURCE_DIR}/verifyEmail.html
         DESTINATION ${CMAKE_BINARY_DIR})
