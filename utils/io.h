@@ -6,6 +6,6 @@
 
 #include <string>
 
-namespace novel::utils::io {
+namespace morpheus::utils::io {
     std::string getFileContent(std::string_view path);
 }

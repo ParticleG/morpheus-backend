@@ -8,8 +8,8 @@
 using namespace drogon;
 using namespace magic_enum;
 using namespace std;
-using namespace novel::helpers;
-using namespace novel::types;
+using namespace morpheus::helpers;
+using namespace morpheus::types;
 
 ResponseJson::ResponseJson(
         HttpStatusCode statusCode,

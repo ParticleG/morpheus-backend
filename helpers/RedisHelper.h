@@ -7,7 +7,7 @@
 #include <drogon/drogon.h>
 #include <cpp_redis/cpp_redis>
 
-namespace novel::helpers {
+namespace morpheus::helpers {
     class RedisHelper : public trantor::NonCopyable {
     public:
         explicit RedisHelper(std::string BaseKey = CMAKE_PROJECT_NAME);

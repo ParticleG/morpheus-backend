@@ -6,7 +6,7 @@
 
 #include <drogon/drogon.h>
 
-namespace novel::helpers {
+namespace morpheus::helpers {
     class BasicJson {
     public:
         BasicJson();

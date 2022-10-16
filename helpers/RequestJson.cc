@@ -6,9 +6,9 @@
 
 using namespace drogon;
 using namespace std;
-using namespace novel::helpers;
-using namespace novel::structures;
-using namespace novel::types;
+using namespace morpheus::helpers;
+using namespace morpheus::structures;
+using namespace morpheus::types;
 
 RequestJson::RequestJson(const RequestJson &json) = default;
 

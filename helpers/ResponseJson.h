@@ -7,7 +7,7 @@
 #include <helpers/BasicJson.h>
 #include <types/ResultCode.h>
 
-namespace novel::helpers {
+namespace morpheus::helpers {
     class ResponseJson : public BasicJson {
     public:
         typedef std::function<void(const drogon::HttpResponsePtr &)> HttpCallback;

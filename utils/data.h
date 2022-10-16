@@ -6,7 +6,7 @@
 
 #include <drogon/drogon.h>
 
-namespace novel::internal {
+namespace morpheus::internal {
     template<typename T>
     concept JsonTypes =
     std::convertible_to<T, bool> ||
@@ -18,7 +18,7 @@ namespace novel::internal {
     std::convertible_to<T, Json::String>;
 };
 
-namespace novel::utils::data {
+namespace morpheus::utils::data {
     std::string randomString(const uint64_t &length);
 }
 

@@ -9,10 +9,10 @@
 using namespace drogon;
 using namespace magic_enum;
 using namespace std;
-using namespace novel::helpers;
-using namespace novel::internal;
-using namespace novel::structures;
-using namespace novel::types;
+using namespace morpheus::helpers;
+using namespace morpheus::internal;
+using namespace morpheus::structures;
+using namespace morpheus::types;
 
 BaseException::BaseException(string message) : _message(std::move(message)) {}
 
@@ -33,6 +33,23 @@ ResponseException::ResponseException(
 
 ResponseJson ResponseException::toJson() const noexcept {
     return ResponseJson(_statusCode, _resultCode)
+            .setMessage(_message)
+            .setReason(_reason);
+}
+
+MessageException::MessageException(
+        string message,
+        bool error
+) : BaseException(std::move(message)), _error(error) {}
+
+MessageException::MessageException(
+        std::string message,
+        const exception &e,
+        bool error
+) : BaseException(std::move(message)), _reason(e.what()), _error(error) {}
+
+MessageJson MessageException::toJson() const noexcept {
+    return MessageJson(_error ? ErrorNumber::Error : ErrorNumber::Failed)
             .setMessage(_message)
             .setReason(_reason);
 }

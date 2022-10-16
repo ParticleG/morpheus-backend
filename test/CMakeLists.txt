@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(NovelAI-backend_test CXX)
+project(morpheus-backend_test CXX)
 
 add_executable(${PROJECT_NAME} test_main.cc)
 

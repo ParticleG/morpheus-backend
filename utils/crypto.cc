@@ -11,7 +11,7 @@
 #include <utils/crypto.h>
 #include <sstream>
 
-using namespace novel::utils;
+using namespace morpheus::utils;
 using namespace CryptoPP;
 using namespace std;
 

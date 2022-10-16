@@ -10,9 +10,9 @@
 using namespace cpp_redis;
 using namespace drogon;
 using namespace std;
-using namespace novel::helpers;
-using namespace novel::structures;
-using namespace novel::utils;
+using namespace morpheus::helpers;
+using namespace morpheus::structures;
+using namespace morpheus::utils;
 
 RedisHelper::RedisHelper(std::string BaseKey) : _baseKey(std::move(BaseKey)) {}
 

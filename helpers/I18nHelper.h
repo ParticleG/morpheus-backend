@@ -6,7 +6,7 @@
 
 #include <drogon/drogon.h>
 
-namespace novel::helpers {
+namespace morpheus::helpers {
     template<class T>
     class I18nHelper : trantor::NonCopyable {
     public:

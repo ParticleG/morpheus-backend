@@ -5,7 +5,7 @@
 #include <helpers/BasicJson.h>
 
 using namespace std;
-using namespace novel::helpers;
+using namespace morpheus::helpers;
 
 BasicJson::BasicJson() : _value(Json::objectValue) {}
 

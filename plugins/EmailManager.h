@@ -7,7 +7,7 @@
 #include <drogon/plugins/Plugin.h>
 #include <trantor/net/TcpClient.h>
 
-namespace novel::plugins {
+namespace morpheus::plugins {
     class EmailManager : public drogon::Plugin<EmailManager> {
     private:
         enum class EmailState {

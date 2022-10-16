@@ -6,7 +6,7 @@
 
 #include <drogon/drogon.h>
 
-namespace novel::types {
+namespace morpheus::types {
     enum class ResultCode : uint32_t {
         // Message codes (100 ~ 199)
 

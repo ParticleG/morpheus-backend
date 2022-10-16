@@ -8,7 +8,7 @@
 #include <sstream>
 #include <trantor/utils/Date.h>
 
-namespace novel::utils::datetime {
+namespace morpheus::utils::datetime {
     std::string toString(const trantor::Date &date = trantor::Date::date());
 
     std::string toString(const int64_t &microseconds);

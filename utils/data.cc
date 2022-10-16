@@ -6,7 +6,7 @@
 #include <random>
 
 using namespace std;
-using namespace novel::utils;
+using namespace morpheus::utils;
 using namespace trantor;
 
 static const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

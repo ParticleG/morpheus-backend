@@ -7,9 +7,10 @@ set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems
 
 message(STATUS "C++ standard set to ${CMAKE_CXX_STANDARD}")
 
-project(NovelAI-backend CXX)
+project(morpheus-backend CXX)
 
 add_compile_definitions(CMAKE_PROJECT_NAME="${PROJECT_NAME}")
+add_compile_definitions(CMAKE_BINARY_DIR="${CMAKE_BINARY_DIR}")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "Compiler is Clang")
@@ -31,7 +32,6 @@ find_library(TACOPIE_LIB tacopie)
 find_package(cryptopp CONFIG REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
-find_package(Python3 COMPONENTS Development REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
@@ -39,8 +39,7 @@ target_link_libraries(${PROJECT_NAME}
         Drogon::Drogon
         magic_enum::magic_enum
         ${CPPREDIS_LIB}
-        ${TACOPIE_LIB}
-        Python3::Python)
+        ${TACOPIE_LIB})
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE
@@ -70,18 +69,6 @@ target_sources(${PROJECT_NAME}
         ${UTIL_SRC})
 
 add_subdirectory(test)
-
-if (WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${Python3_EXECUTABLE} -m venv $<TARGET_FILE_DIR:${PROJECT_NAME}>/..
-            COMMAND $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Scripts/activate.bat
-            COMMAND python -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt > pip_install.log)
-else ()
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${Python3_EXECUTABLE} -m venv $<TARGET_FILE_DIR:${PROJECT_NAME}>/..
-            COMMAND $<TARGET_FILE_DIR:${PROJECT_NAME}>/../Scripts/activate
-            COMMAND python -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt > pip_install.log)
-endif ()
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config.json ${CMAKE_CURRENT_SOURCE_DIR}/verifyEmail.html
         DESTINATION ${CMAKE_BINARY_DIR})

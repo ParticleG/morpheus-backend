@@ -11,9 +11,9 @@ using namespace drogon;
 using namespace magic_enum;
 using namespace std;
 using namespace trantor;
-using namespace novel::plugins;
-using namespace novel::structures;
-using namespace novel::types;
+using namespace morpheus::plugins;
+using namespace morpheus::structures;
+using namespace morpheus::types;
 
 void EmailManager::messageHandler(
         const TcpConnectionPtr &connPtr,

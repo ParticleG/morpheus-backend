@@ -5,12 +5,13 @@
 #pragma once
 
 #include <drogon/drogon.h>
+#include <helpers/MessageJson.h>
 #include <helpers/RequestJson.h>
 #include <helpers/ResponseJson.h>
 #include <types/JsonValue.h>
 #include <types/ResultCode.h>
 
-namespace novel::internal {
+namespace morpheus::internal {
     class BaseException : public std::exception {
     public:
         explicit BaseException(std::string message);
@@ -24,7 +25,7 @@ namespace novel::internal {
     };
 }
 
-namespace novel::structures {
+namespace morpheus::structures {
     class ResponseException : public internal::BaseException {
     public:
         explicit ResponseException(
@@ -46,6 +47,26 @@ namespace novel::structures {
         const std::string _reason;
         const types::ResultCode _resultCode;
         const drogon::HttpStatusCode _statusCode;
+    };
+
+    class MessageException : public internal::BaseException {
+    public:
+        explicit MessageException(
+                std::string message,
+                bool error = false
+        );
+
+        explicit MessageException(
+                std::string message,
+                const std::exception &e,
+                bool error = false
+        );
+
+        [[nodiscard]] helpers::MessageJson toJson() const noexcept;
+
+    private:
+        const std::string _reason;
+        const bool _error;
     };
 
     class EmailException : public internal::BaseException {

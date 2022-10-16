@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace novel::utils::crypto {
+namespace morpheus::utils::crypto {
     namespace panama {
         [[maybe_unused]] std::string generateKey();
 

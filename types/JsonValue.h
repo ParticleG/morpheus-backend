@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace novel::types {
+namespace morpheus::types {
     enum class JsonValue {
         Null,
         Object,

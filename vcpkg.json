@@ -19,7 +19,6 @@
                 "postgres"
             ]
         },
-        "magic-enum",
-        "python3"
+        "magic-enum"
     ]
 }

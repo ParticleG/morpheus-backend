@@ -9,7 +9,7 @@
 #include <types/JsonValue.h>
 #include <utils/data.h>
 
-namespace novel::helpers {
+namespace morpheus::helpers {
     class RequestJson : public BasicJson {
     public:
         RequestJson() = default;
